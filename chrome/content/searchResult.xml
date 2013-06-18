@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: GPL 3.0
+ *
+ * The contents of this file are subject to the General Public License
+ * 3.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * ## Easy NZB Download.
+ *
+ * Author: Michel Verbraak (info@1st-setup.nl)
+ * Website: https://github.com/1stsetup/easynzbdl
+ *
+ * ***** BEGIN LICENSE BLOCK *****/
+-->
+
+<bindings id="easynzbdl-searchResult-bindings"
+  xmlns="http://www.mozilla.org/xbl"
+  xmlns:html="http://www.w3.org/1999/xhtml"
+  xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <binding id="easynzbdl-searchResultItem">
+    <content>
+	<xul:hbox>
+		<xul:vbox>
+			<xul:label anonid="expand-searchResultItem" value="+"/>
+		</xul:vbox>
+		<xul:vbox>
+			<xul:vbox anonid="searchResultItemLabelBox">
+				<xul:label anonid="searchResultItemLabel" value="empty" xbl:inherits="value=label"/>
+			</xul:vbox>
+			<xul:vbox anonid="searchResultInfoBox" hidden="true">
+			</xul:vbox>
+		</xul:vbox>
+	</xul:hbox>
+    </content>
+
+    <implementation>
+      <constructor><![CDATA[
+		dump("easynzbdl-searchResultItem constructor\n");
+		this._item = null;
+      ]]></constructor>
+      <destructor><![CDATA[
+		this._item = null;
+      ]]></destructor>
+
+	<property name="item"> 
+		<getter><![CDATA[
+			return this._item;
+		]]></getter>
+		<setter><![CDATA[
+			dump("Adding item 1!!\n");
+			this._item = val;
+			dump("Adding item 2!!\n");
+			if (this._item) {
+				dump("item:"+this._item.getTagValue("_default_:title")+"\n");
+				this.setAttribute("label", this._item.getTagValue("_default_:title"));
+			}
+
+		]]></setter>
+	</property>
+
+	<property name="expanded"> 
+		<getter><![CDATA[
+			return this._expanded;
+		]]></getter>
+		<setter><![CDATA[
+			this._expanded = val;
+			let itemsBox = document.getAnonymousElementByAttribute(this, "anonid", "searchResultInfoBox");
+			if (itemsBox) {
+				itemsBox.hidden = !this.expanded;
+			}
+		]]></setter>
+	</property>
+
+	<method name="show">
+		<body><![CDATA[
+		this.hidden = false;
+		]]></body>
+	</method>
+
+	<method name="hide">
+		<body><![CDATA[
+		this.hidden = true;
+		]]></body>
+	</method>
+
+    </implementation>
+
+  </binding>
+
+  <binding id="easynzbdl-searchResultBox">
+    <content>
+	<xul:hbox>
+		<xul:vbox>
+			<xul:label anonid="expand-searchResults" value="+"/>
+		</xul:vbox>
+		<xul:vbox>
+			<xul:vbox anonid="searchResultBoxLabelBox">
+				<xul:label anonid="searchResultBoxLabel" value="empty" xbl:inherits="value=label"/>
+			</xul:vbox>
+			<xul:vbox anonid="searchResultBoxItemsBox" hidden="true">
+			</xul:vbox>
+		</xul:vbox>
+	</xul:hbox>
+    </content>
+
+    <implementation>
+      <constructor><![CDATA[
+		dump("easynzbdl-searchResultBox constructor\n");
+         this._resultCount = 0;
+	 this._expanded = false;
+      ]]></constructor>
+
+	<property name="resultCount"> 
+		<getter><![CDATA[
+			return this._resultCount;
+		]]></getter>
+		<setter><![CDATA[
+			this._resultCount = val;
+		]]></setter>
+	</property>
+
+	<property name="expanded"> 
+		<getter><![CDATA[
+			return this._expanded;
+		]]></getter>
+		<setter><![CDATA[
+			this._expanded = val;
+			let itemsBox = document.getAnonymousElementByAttribute(this, "anonid", "searchResultBoxItemsBox");
+			if (itemsBox) {
+				itemsBox.hidden = !this.expanded;
+			}
+		]]></setter>
+	</property>
+
+	<method name="show">
+		<body><![CDATA[
+		this.hidden = false;
+		]]></body>
+	</method>
+
+	<method name="hide">
+		<body><![CDATA[
+		this.hidden = true;
+		]]></body>
+	</method>
+
+	<method name="addResultItem">
+        <parameter name="aItem" />
+		<body><![CDATA[
+		if (aItem) {
+			
+//			var resultItem = document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "xul:easynzbdl-searchResultItem");
+
+			let itemsBox = document.getAnonymousElementByAttribute(this, "anonid", "searchResultBoxItemsBox");
+			if (itemsBox) {
+				itemsBox.appendChild(aItem);
+				this.resultCount++;
+			}
+		}
+		]]></body>
+	</method>
+
+	<method name="clearResults">
+		<body><![CDATA[
+			let itemsBox = document.getAnonymousElementByAttribute(this, "anonid", "searchResultBoxItemsBox");
+			if (itemsBox) {
+				while (itemsBox.childNodes.length > 0) {
+					itemsBox.removeChild( itemsBox.childNodes.item(0) );
+				}
+			}
+		]]></body>
+	</method>
+
+    </implementation>
+
+  </binding>
+
+</bindings>

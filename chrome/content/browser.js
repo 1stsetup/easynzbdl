@@ -24,12 +24,14 @@ var Cc = Components.classes;
 Cu.import("resource://easynzbdl/globalFunctions.js");
 Cu.import("resource://interfaces/xml2jxon/mivIxml2jxon.js");
 
-function easynzbdlGetNZB(aImdbId, aDocument)
+function easynzbdlGetNZB(aImdbId, aDocument, searchResultBox)
 {
 	this.req = Cc["@mozilla.org/xmlextras/xmlhttprequest;1"].createInstance();
 
 	this.imdbId = aImdbId;
 	this._document = aDocument;
+	this.searchResultBox = searchResultBox;
+
 	this.items = [];
 
 	var tmp = this;
@@ -90,12 +92,11 @@ easynzbdlGetNZB.prototype = {
 		if (items.length > 0) {
 
 			var vbox = this._document.getElementById("easynzbdl-appcontent-vbox");
+
 			for (var i=0; i<items.length; i++) {
-				this.items.push(items[i].clone());
 				dump("item Title:"+items[i].getTagValue("_default_:title")+"\n");
-				let node_anchor = this._document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "xul:label");
-				node_anchor.setAttribute("value", items[i].getTagValue("_default_:title"));
-				vbox.appendChild(node_anchor);
+				var searchResultItem = this._document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "xul:easynzbdl-searchResultItem");
+				this.searchResultBox.addResultItem(searchResultItem);
 			}
 		}
 		dump("easynzbdlGetNZB.loadend DONE\n");
@@ -137,39 +138,6 @@ easynzbdlBrowser.prototype = {
 		return null;
 	},
 
-	showDiv: function _showDiv(aId, aImdbId)
-	{
-		let div = this._document.getElementById(aId);
-		if (div) {
-			let label = this._document.getElementById("easynzbdl-appcontent-label");
-			if (label) label.value = "imdbId:"+aImdbId;
-			div.hidden = false;
-		}
-	},
-
-	hideDiv: function _hideDiv(aId)
-	{
-		let div = this._document.getElementById(aId);
-		if (div) {
-			div.hidden = true;
-		}
-	},
-
-	clearDiv: function _clearDiv(aId)
-	{
-		let div = this._document.getElementById(aId);
-		if (div) {
-			dump("We have '"+div.childNodes.length+"' childnodes\n");
-			while (div.childNodes.length > 0) {
-				div.removeChild( div.childNodes.item(0) );
-			}
-
-			let node_anchor = this._document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "xul:label");
-			node_anchor.setAttribute("id", "easynzbdl-appcontent-label");
-			div.appendChild(node_anchor);
-		}
-	},
-
 	parsePage: function _parsePage(event)
 	{
 		dump("easynzbdlBrowser.parsePage\n");
@@ -183,17 +151,24 @@ easynzbdlBrowser.prototype = {
 
 			let imdbId = this.getImdbId(event.target.location.toString());
 			if (imdbId) {
-				if (this._markedPages[imdbId]) return;
-				if ((this._lastImdbId) && (imdbId != this._lastImdbId)) {
-					this.clearDiv("easynzbdl-appcontent-vbox");
+				if (this._markedPages[imdbId]) {
+					if ((this._lastImdbId) && (this._markedPages[this._lastImdbId])) {
+						this._markedPages[this._lastImdbId].searchResultBox.hide();
+					}
+					this._markedPages[imdbId].searchResultBox.show();
+					return;
 				}
-				this._markedPages[imdbId] = new easynzbdlGetNZB(imdbId, this._document);
+
+				var searchResultBox = this._document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "xul:easynzbdl-searchResultBox");
+				searchResultBox.setAttribute("label", "imdbId:"+imdbId);
+				searchResultBox.id = imdbId;
+				let appcontent = this._document.getElementById("appcontent");
+				appcontent.appendChild(searchResultBox);
+				
+				this._markedPages[imdbId] = { searchResultBox: searchResultBox,
+								searchObject: new easynzbdlGetNZB(imdbId, this._document, searchResultBox)};
 				this._lastImdbId = imdbId;
 				dump("easynzbdlBrowser.parsePage: imdbId:"+imdbId+"\n");
-
-				this.showDiv("easynzbdl-appcontent-vbox", imdbId);
-				dump("easynzbdlBrowser.parsePage: shown label.\n");
-				
 			}
 		}
 	},
@@ -223,11 +198,15 @@ easynzbdlBrowser.prototype = {
 
 			let imdbId = this.getImdbId(tabBrowser.currentURI.spec);
 			if (imdbId) {
-				this.showDiv("easynzbdl-appcontent-vbox", imdbId);
+				if (this._markedPages[imdbId]) {
+					this._markedPages[imdbId].searchResultBox.show();
+				}
 				dump("easynzbdlBrowser.onTabSelect: imdbId:"+imdbId+"\n");
 			}
 			else {
-				this.hideDiv("easynzbdl-appcontent-vbox");
+				if ((this._lastImdbId) && (this._markedPages[this._lastImdbId])) {
+					this._markedPages[this._lastImdbId].searchResultBox.hide();
+				}
 				dump("easynzbdlBrowser.parsePage: hidden label.\n");
 			}
 		}
@@ -246,7 +225,9 @@ easynzbdlBrowser.prototype = {
 			let imdbId = this.getImdbId(tabBrowser.currentURI.spec);
 			if (imdbId) {
 				dump("easynzbdlBrowser.onTabClose: imdbId:"+imdbId+"\n");
-				this.hideDiv("easynzbdl-appcontent-vbox");
+				if (this._markedPages[imdbId]) {
+					this._markedPages[imdbId].searchResultBox.hide();
+				}
 				this._markedPages[imdbId] = null;
 				delete this._markedPages[imdbId];
 			}
@@ -257,5 +238,5 @@ easynzbdlBrowser.prototype = {
 }
 
 var tmpEasynzbdlBrowser = new easynzbdlBrowser(document, window);
-window.addEventListener("load", function () { window.removeEventListener("load",arguments.callee,false); tmpEasynzbdlBrowser.onLoad(); }, true);
+window.addEventListener("load", function () { window.removeEventListener("load",arguments.callee,true); tmpEasynzbdlBrowser.onLoad(); }, true);
 

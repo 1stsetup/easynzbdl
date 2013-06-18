@@ -27,6 +27,8 @@
     %dtd1;
 ]>
 
+<?xml-stylesheet href="chrome://easynzbdl/content/searchResult.css"?>
+
 <overlay id="easynzbdl-brwoser.xul"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
@@ -42,11 +44,6 @@
 		</toolbarbutton>
 	</toolbar>
 
-	<vbox id="appcontent">
-		<vbox id="easynzbdl-appcontent-vbox" hidden="true">
-			<label id="easynzbdl-appcontent-label" value="easynzbdl"/>
-		</vbox>
-	</vbox>
 </overlay>
 
 

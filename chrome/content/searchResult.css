@@ -1,0 +1,11 @@
+@import url(chrome://global/skin/);
+
+easynzbdl-searchResultItem { 
+  -moz-binding: url(chrome://easynzbdl/content/searchResultItem.xml#easynzbdl-searchResultItem);
+}
+
+easynzbdl-searchResultBox { 
+  -moz-binding: url(chrome://easynzbdl/content/searchResultBox.xml#easynzbdl-searchResultBox);
+}
+
+
