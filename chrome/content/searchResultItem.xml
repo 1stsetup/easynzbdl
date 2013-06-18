@@ -35,10 +35,13 @@
 			<xul:label anonid="expand-searchResultItem" value="+"/>
 		</xul:vbox>
 		<xul:vbox>
-			<xul:vbox anonid="searchResultItemLabelBox">
-				<xul:label anonid="searchResultItemLabel" value="empty" xbl:inherits="value=label"/>
-			</xul:vbox>
-			<xul:vbox anonid="searchResultInfoBox" hidden="true">
+			<xul:hbox anonid="searchResultItemLabelBox">
+				<xul:label anonid="searchResultItemTitleLabel" value="empty" xbl:inherits="value=label"/>
+				<xul:label anonid="searchResultItemDaysLabel" value="" xbl:inherits="value=days"/>
+				<xul:image anonid="searchResultItemDownloadButton" class="downloadbutton" onclick="document.getBindingParent(this).startDownLoad();"/>
+				<xul:label anonid="searchResultItemDaysLabel" value="" xbl:inherits="value=status"/>
+			</xul:hbox>
+			<xul:vbox anonid="searchResultInfoBox" collapsed="true">
 			</xul:vbox>
 		</xul:vbox>
 	</xul:hbox>
@@ -46,26 +49,53 @@
 
     <implementation>
       <constructor><![CDATA[
-		dump("easynzbdl-searchResultItem constructor\n");
+		//dump("easynzbdl-searchResultItem constructor\n");
 		this._item = null;
       ]]></constructor>
       <destructor><![CDATA[
 		this._item = null;
       ]]></destructor>
 
-	<method name="setItem"> 
-        <parameter name="aItem" />
-		<body><![CDATA[
-			dump("Adding item 1!!\n");
-			this._item = aItem;
-			dump("Adding item 2!!\n");
+	<property name="item"> 
+		<getter><![CDATA[
+			return this._item;
+		]]></getter>
+		<setter><![CDATA[
+			this._item = val;
 			if (this._item) {
-				dump("item:"+this._item.getTagValue("_default_:title")+"\n");
+				//dump("item:"+this._item.getTagValue("_default_:title")+"\n");
 				this.setAttribute("label", this._item.getTagValue("_default_:title"));
-			}
 
-		]]></body>
-	</method>
+				// Get usenetdate
+				let usenetdate = this._item.XPath('/newznab:attr[@name="usenetdate"]');
+				if (usenetdate.length > 0) {
+					//dump("We have a usenetdate\n");
+					usenetdate = usenetdate[0].getAttribute("value");
+					//dump("usenetdate:"+usenetdate+"\n");
+					this._usenetdate = new Date(usenetdate);
+					var diff = ((new Date()).getTime() - this._usenetdate.getTime()) / (1000*3600);
+					if (diff >= 24) {
+						// We make days.
+						
+						this.setAttribute("days", Math.round(diff/24) + " days");
+					}
+					else {
+						// We make hours.
+						this.setAttribute("days", Math.round(diff) + " hours");
+					}
+				}
+			}
+		]]></setter>
+	</property>
+
+	<property name="parentObject"> 
+		<getter><![CDATA[
+			return this._parentObject;
+		]]></getter>
+		<setter><![CDATA[
+			this._parentObject = val;
+		]]></setter>
+	</property>
 
 	<property name="expanded"> 
 		<getter><![CDATA[
@@ -75,7 +105,7 @@
 			this._expanded = val;
 			let itemsBox = document.getAnonymousElementByAttribute(this, "anonid", "searchResultInfoBox");
 			if (itemsBox) {
-				itemsBox.hidden = !this.expanded;
+				itemsBox.collapsed = !this.expanded;
 			}
 		]]></setter>
 	</property>
@@ -89,6 +119,15 @@
 	<method name="hide">
 		<body><![CDATA[
 		this.hidden = true;
+		]]></body>
+	</method>
+
+	<method name="startDownLoad">
+		<body><![CDATA[
+		//dump("Start download\n");
+		if (this._parentObject) {
+			this._parentObject.startDownload(this);
+		}
 		]]></body>
 	</method>
 

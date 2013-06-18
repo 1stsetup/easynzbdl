@@ -8,4 +8,9 @@ easynzbdl-searchResultBox {
   -moz-binding: url(chrome://easynzbdl/content/searchResultBox.xml#easynzbdl-searchResultBox);
 }
 
-
+.downloadbutton {
+	width: 16px;
+	height: 16px;
+	list-style-image: url(chrome://easynzbdl/content/download-cloud.png);
+	-moz-image-region: rect(0, 15, 15, 0);
+}

@@ -35,10 +35,11 @@
 			<xul:label anonid="expand-searchResultBox" value="+"/>
 		</xul:vbox>
 		<xul:vbox>
-			<xul:vbox anonid="searchResultBoxLabelBox">
-				<xul:label anonid="searchResultBoxLabel" value="empty" xbl:inherits="value=label"/>
-			</xul:vbox>
-			<xul:vbox anonid="searchResultBoxItemsBox" hidden="true">
+			<xul:hbox anonid="searchResultBoxLabelBox">
+				<xul:label anonid="searchResultBoxTitleLabel" value="empty" xbl:inherits="value=label"/>
+				<xul:label anonid="searchResultBoxStateLabel" value="" xbl:inherits="value=status"/>
+			</xul:hbox>
+			<xul:vbox anonid="searchResultBoxItemsBox" collapsed="true">
 			</xul:vbox>
 		</xul:vbox>
 	</xul:hbox>
@@ -46,7 +47,7 @@
 
     <implementation>
       <constructor><![CDATA[
-		dump("easynzbdl-searchResultBox constructor\n");
+	//dump("easynzbdl-searchResultBox constructor\n");
          this._resultCount = 0;
 	 this._expanded = false;
       ]]></constructor>
@@ -68,8 +69,13 @@
 			this._expanded = val;
 			let itemsBox = document.getAnonymousElementByAttribute(this, "anonid", "searchResultBoxItemsBox");
 			if (itemsBox) {
-				itemsBox.hidden = !this.expanded;
+				itemsBox.collapsed = !this.expanded;
 			}
+			let expandLabel = document.getAnonymousElementByAttribute(this, "anonid", "expand-searchResultBox");
+			if (expandLabel) {
+				expandLabel.value = this.expanded ? "-" : "+";
+			}
+
 		]]></setter>
 	</property>
 
@@ -93,31 +99,33 @@
 
 	<method name="addResultItem">
         <parameter name="aItem" />
+        <parameter name="aParentObject" />
 		<body><![CDATA[
 		if (aItem) {
 			
 			var resultItem = document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "xul:easynzbdl-searchResultItem");
-			resultItem.setAttribute("bliep", "bliep");
 
 			let itemsBox = document.getAnonymousElementByAttribute(this, "anonid", "searchResultBoxItemsBox");
 			if (itemsBox) {
-				var self = this;
-dump(" -- AA --\n");
-				resultItem.addEventListener("load", function () { dump(" -- LOAD --\n"); resultItem.removeEventListener("load",arguments.callee,true); self.onResultItemLoad(resultItem, aItem); }, true);
-dump(" -- BB --\n");
 				itemsBox.appendChild(resultItem);
+				var self = this;
+				resultItem.addEventListener("load", function () { resultItem.removeEventListener("load",arguments.callee,false); self.onElementLoad(resultItem, aItem, aParentObject); }, false);
+				//resultItem.item = aItem;
+				//resultItem.parentObject = aParentObject;
 				this.resultCount++;
 			}
 		}
 		]]></body>
 	</method>
 
-	<method name="onResultItemLoad">
-        <parameter name="aResultItem" />
+	<method name="onElementLoad">
+        <parameter name="aElement" />
         <parameter name="aItem" />
+        <parameter name="aParentObject" />
 		<body><![CDATA[
-dump(" -- onResultItemLoad --\n");
-		aResultItem.setItem(aItem);
+			//dump(" -- onElementLoad -- \n");
+			aElement.item = aItem;
+			aElement.parentObject = aParentObject;
 		]]></body>
 	</method>
 
