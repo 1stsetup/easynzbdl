@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: GPL 3.0
+ *
+ * The contents of this file are subject to the General Public License
+ * 3.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * ## Easy NZB Download.
+ *
+ * Author: Michel Verbraak (info@1st-setup.nl)
+ * Website: https://github.com/1stsetup/easynzbdl
+ *
+ * ***** BEGIN LICENSE BLOCK *****/
+-->
+
+<!DOCTYPE overlay [
+    <!ENTITY % preferencesDTD SYSTEM "chrome://browser/locale/preferences/preferences.dtd">
+    <!ENTITY % dtd1 SYSTEM "chrome://easynzbdl/locale/preferences.dtd" >
+    %preferencesDTD;
+    %dtd1;
+]>
+
+<?xml-stylesheet href="chrome://easynzbdl/content/preferences.css"?>
+
+<overlay id="easynzbdl_downloadProvider_preferences_overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script type="application/javascript" src="chrome://easynzbdl/content/downloadProviderPreferences.js"/>
+
+    <vbox id="easynzbdl_dowload_preferences_vbox">
+
+        <preferences>
+            <preference id="extensions.1st-setup.easynzbdl.download.serverurl"
+                        name="extensions.1st-setup.easynzbdl.download.serverurl"
+                        type="string"/>
+
+            <preference id="extensions.1st-setup.easynzbdl.download.apikey"
+                        name="extensions.1st-setup.easynzbdl.download.apikey"
+                        type="string"/>
+
+            <preference id="extensions.1st-setup.easynzbdl.download.username"
+                        name="extensions.1st-setup.easynzbdl.download.username"
+                        type="string"/>
+
+            <preference id="extensions.1st-setup.easynzbdl.download.password"
+                        name="extensions.1st-setup.easynzbdl.download.password"
+                        type="string"/>
+
+        </preferences>
+
+	<groupbox id="easynzbdl_download_serverurl_groupbox">
+            <caption label="&easynzbdl.preferences.download.server.caption;"/>
+	    <hbox>
+		<label value="&easynzbdl.preferences.download.serverurl.label;"/>
+		<textbox id="easynzbdl_preference_download_serverurl_textbox" 
+			preference="extensions.1st-setup.easynzbdl.download.serverurl"
+			flex="1"/>
+	    </hbox>
+	    <hbox>
+		<label value="&easynzbdl.preferences.download.apikey.label;"/>
+		<textbox id="asynzbdl_preference_download_apikey_textbox" 
+			preference="extensions.1st-setup.easynzbdl.download.apikey"
+			flex="1"/>
+	    </hbox>
+	    <hbox>
+		<label value="&easynzbdl.preferences.download.username.label;"/>
+		<textbox id="asynzbdl_preference_download_username_textbox" 
+			preference="extensions.1st-setup.easynzbdl.download.username"/>
+	    </hbox>
+	    <hbox>
+		<label value="&easynzbdl.preferences.download.password.label;"/>
+		<textbox id="asynzbdl_preference_download_password_textbox" 
+			preference="extensions.1st-setup.easynzbdl.download.password"
+			type="password"/>
+	    </hbox>
+        </groupbox>
+
+    </vbox>
+</overlay>

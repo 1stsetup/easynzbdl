@@ -1,0 +1,15 @@
+<!ENTITY easynzbdl.panePreferences.title "EasyNZBdl">
+
+<!ENTITY easynzbdl.preferences.tab.search "Search provider">
+<!ENTITY easynzbdl.preferences.tab.download "Download provider">
+
+<!ENTITY easynzbdl.preferences.search.server.caption "Search server details:">
+<!ENTITY easynzbdl.preferences.search.serverurl.label "Server url:">
+<!ENTITY easynzbdl.preferences.search.apikey.label "API key:">
+
+<!ENTITY easynzbdl.preferences.download.server.caption "Donwload SABnzbd server details:">
+<!ENTITY easynzbdl.preferences.download.serverurl.label "SABnzbd url:">
+<!ENTITY easynzbdl.preferences.download.apikey.label "API key:">
+<!ENTITY easynzbdl.preferences.download.username.label "Username:">
+<!ENTITY easynzbdl.preferences.download.password.label "Password:">
+

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+  <Description about="urn:mozilla:install-manifest">
+    <em:id>easynzbdl@extensions.1st-setup.nl</em:id>
+    <em:version>0.0.1</em:version>
+
+    <em:targetApplication>
+      <Description>
+      	<!-- Firefox -->
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <em:minVersion>12.0</em:minVersion>
+        <em:maxVersion>25.0</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+
+    <em:name>Easy NZB Download</em:name>
+    <em:description>Allows you to easyly find the NZB to a movie, from imdb, and send it to SABnzbd for download</em:description>
+    <em:creator>Michel Verbraak</em:creator>
+    <em:homepageURL>https://github.com/1stsetup/easynzbdl</em:homepageURL>
+    <em:iconURL>chrome://easynzbdl/content/easynzbdl.png</em:iconURL>
+    <em:type>2</em:type> <!-- type: extension -->
+    <em:unpack>true</em:unpack>
+
+	<em:localized>
+		<Description>
+			<em:locale>en-US</em:locale>
+			<em:name>Easy NZB Download</em:name>
+			<em:description>Allows you to easyly find the NZB to a movie, from imdb, and send it to SABnzbd for download</Description>
+	</em:localized>
+
+	<em:localized>
+		<Description>
+			<em:locale>nl</em:locale>
+			<em:name>Exchange EWS Provider</em:name>
+			<em:description>Via een imdb pagina kun je makkelijk de bijbehorende NZB laten opzoeken en doorgeven aan SABnzbd voor download.</Description>
+	</em:localized>
+
+  </Description>
+</RDF>

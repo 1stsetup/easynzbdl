@@ -1,0 +1,17 @@
+content easynzbdl chrome/content/
+skin easynzbdl fugue chrome/skins/fugue/
+resource easynzbdl components/
+resource interfaces interfaces/
+
+overlay chrome://browser/content/browser.xul chrome://easynzbdl/content/browser.xul
+
+overlay chrome://browser/content/preferences/preferences.xul  chrome://easynzbdl/content/browser-overlay-preferences.xul
+overlay chrome://browser/content/preferences/preferences.xul  chrome://easynzbdl/content/searchProviderPreferences.xul
+overlay chrome://browser/content/preferences/preferences.xul  chrome://easynzbdl/content/downloadProviderPreferences.xul
+
+locale easynzbdl en-US locale/easynzbdl/en-US/
+
+manifest interfaces/xml2jxon/mivIxml2jxon.manifest
+manifest interfaces/xml2jxon/mivNameSpaces.manifest
+manifest interfaces/xml2jxon/mivTagNames.manifest
+

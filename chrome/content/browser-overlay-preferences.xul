@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+
+<!--
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: GPL 3.0
+ *
+ * The contents of this file are subject to the General Public License
+ * 3.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * ## Easy NZB Download.
+ *
+ * Author: Michel Verbraak (info@1st-setup.nl)
+ * Website: https://github.com/1stsetup/easynzbdl
+ *
+ * ***** BEGIN LICENSE BLOCK *****/
+-->
+
+<!DOCTYPE overlay [
+    <!ENTITY % preferencesDTD SYSTEM "chrome://browser/locale/preferences/preferences.dtd">
+    <!ENTITY % dtd1 SYSTEM "chrome://easynzbdl/locale/preferences.dtd" >
+    %preferencesDTD;
+    %dtd1;
+]>
+
+<?xml-stylesheet href="chrome://easynzbdl/content/preferences.css"?>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <prefwindow id="BrowserPreferences">
+        <prefpane id="easynzbdl_panePreferences" 
+                  label="&easynzbdl.panePreferences.title;">
+            <preferences>
+                <preference id="extensions.1st-setup.easynzbdl.preferences.selectedTabIndex"
+                            name="extensions.1st-setup.easynzbdl.preferences.selectedTabIndex"
+                            type="int"/>
+            </preferences>
+            <tabbox id="easynzbdl_preferences_tabbox" 
+                    flex="1">
+                <tabs>
+                    <tab id="easynzbdl_preferences_tab_search"
+                         label="&easynzbdl.preferences.tab.search;"/>
+                    <tab id="easynzbdl_preferences_tab_dowload"
+                         label="&easynzbdl.preferences.tab.download;"/>
+                </tabs>
+                <tabpanels flex="1">
+                    <tabpanel orient="vertical">
+        			<vbox id="easynzbdl_search_preferences_vbox"/>
+                    </tabpanel>
+                    <tabpanel orient="vertical">
+        			<vbox id="easynzbdl_dowload_preferences_vbox"/>
+                    </tabpanel>
+                </tabpanels>
+            </tabbox>
+        </prefpane>
+
+    </prefwindow>
+
+</overlay>
