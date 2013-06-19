@@ -14,7 +14,7 @@
  * ## Easy NZB Download.
  *
  * Author: Michel Verbraak (info@1st-setup.nl)
- * Website: https://github.com/1stsetup/easynzbdl
+ * Website: http://www.easynzbdl.com/
  *
  * ***** BEGIN LICENSE BLOCK *****/
 var Cu = Components.utils;
