@@ -54,6 +54,10 @@
                         name="extensions.1st-setup.easynzbdl.download.password"
                         type="string"/>
 
+            <preference id="extensions.1st-setup.easynzbdl.download.category"
+                        name="extensions.1st-setup.easynzbdl.download.category"
+                        type="string"/>
+
         </preferences>
 
 	<groupbox id="easynzbdl_download_serverurl_groupbox">
@@ -86,6 +90,11 @@
 					<textbox id="asynzbdl_preference_download_password_textbox" 
 						preference="extensions.1st-setup.easynzbdl.download.password"
 						type="password"/>
+				</row>
+				<row align="center">
+					<label value="&easynzbdl.preferences.download.category.label;"/>
+					<textbox id="asynzbdl_preference_download_category_textbox" 
+						preference="extensions.1st-setup.easynzbdl.download.category"/>
 				</row>
 			</rows>
 		</grid>

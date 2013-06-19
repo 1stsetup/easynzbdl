@@ -12,4 +12,5 @@
 <!ENTITY easynzbdl.preferences.download.apikey.label "API key:">
 <!ENTITY easynzbdl.preferences.download.username.label "Username:">
 <!ENTITY easynzbdl.preferences.download.password.label "Password:">
+<!ENTITY easynzbdl.preferences.download.category.label "Category:">
 

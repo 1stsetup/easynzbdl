@@ -40,13 +40,13 @@ easynzbdlDownloadNZB.prototype = {
 		//dump("easynzbdlDownloadNZB.startDownload\n");
 		this._element = aElement;
 
-		let serverurl = enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.download.serverurl", "", true);
-		if (serverurl[serverurl.length-1] != "/") {
-			serverurl = serverurl + "/";
+		this._serverurl = enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.download.serverurl", "", false);
+		if (this._serverurl[this._serverurl.length-1] != "/") {
+			this._serverurl = this._serverurl + "/";
 		}
-		let apikey = encodeURIComponent(enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.download.apikey", "", true));
+		this._apikey = encodeURIComponent(enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.download.apikey", "", false));
 
-		if ((serverurl == "/") || (apikey == "")) {
+		if ((this._serverurl == "/") || (this._apikey == "")) {
 			//dump("  Not all preferences are available. Going to open pref dialog.\n");
 			alert("Not all preferences for download provider are available. Going to open pref dialog.");
 			this._window.openDialog("chrome://browser/content/preferences/preferences.xul",
@@ -54,13 +54,13 @@ easynzbdlDownloadNZB.prototype = {
 				"chrome,titlebar,toolbar,centerscreen,dialog,modal=yes,resizable=no",
 				null); 
 
-			serverurl = enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.download.serverurl", "", true);
-			if (serverurl[serverurl.length-1] != "/") {
-				serverurl = serverurl + "/";
+			this._serverurl = enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.download.serverurl", "", false);
+			if (this._serverurl[this._serverurl.length-1] != "/") {
+				this._serverurl = this._serverurl + "/";
 			}
-			apikey = encodeURIComponent(enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.download.apikey", "", true));
+			this._apikey = encodeURIComponent(enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.download.apikey", "", false));
 
-			if ((serverurl == "/") || (apikey == "")) {
+			if ((this._serverurl == "/") || (this._apikey == "")) {
 				alert("You did not enter all preferences for download provider! Aborting download.");
 				this._element.setAttribute("status", "(Aborted sending NZB to SABnzbd)");
 				return;
@@ -79,7 +79,7 @@ easynzbdlDownloadNZB.prototype = {
 
 		//dump("easynzbdlGetNZB.new: Going to get: "+serverurl+"api?t=movie&imdbid="+finaleImdbId+"&apikey="+apikey+"&extended=1\n");
 	 
-		this.req.open("GET", serverurl+"api?mode=get_cats&output=json&apikey="+apikey, true);
+		this.req.open("GET", this._serverurl+"api?mode=get_cats&output=json&apikey="+this._apikey, true);
 		this.req.send();
 		//dump("easynzbdlDownloadNZB.startDownload: send GET request.\n");
 		this._element.setAttribute("status", "(Getting categories from SABnzbd)");
@@ -116,18 +116,17 @@ easynzbdlDownloadNZB.prototype = {
 		this.req2.addEventListener("loadend", function(evt) { self.loadendSendToSABnzbd(evt); }, false);
 		this.req2.addEventListener("error", function(evt) { self.errorSendToSABnzbd(evt); }, false);
 
-		let serverurl = enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.download.serverurl", "", true);
-		if (serverurl[serverurl.length-1] != "/") {
-			serverurl = serverurl + "/";
-		}
-		let apikey = encodeURIComponent(enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.download.apikey", "", true));
-
 		var nzbUrl = encodeURIComponent(this.item.getTagValue("_default_:link", ""));
 		var niceName = encodeURIComponent(this.item.getTagValue("_default_:title", ""));
 
 		//dump("easynzbdlGetNZB.new: Going to get: "+serverurl+"api?mode=addurl&name="+nzbUrl+"&nzbname="+niceName+"&apikey="+apikey+"\n");
 
-		this.req2.open("GET", serverurl+"api?mode=addurl&name="+nzbUrl+"&nzbname="+niceName+"&apikey="+apikey, true);
+		var category = encodeURIComponent(enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.download.category", "", false));
+		if (category != "") {
+			category = "&cat="+encodeURIComponent(category);
+		}
+
+		this.req2.open("GET", this._serverurl+"api?mode=addurl&name="+nzbUrl+"&nzbname="+niceName+"&apikey="+this._apikey+category, true);
 		this.req2.send();
 		//dump("easynzbdlDownloadNZB.loadend: send GET request.\n");
 		this._element.setAttribute("status", "(Sending NZB to SABnzbd)");
