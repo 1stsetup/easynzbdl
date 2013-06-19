@@ -75,6 +75,7 @@ easynzbdlDownloadNZB.prototype = {
 		// http://dvcs.w3.org/hg/progress/raw-file/tip/Overview.html
 		// https://developer.mozilla.org/en/XPCOM_Interface_Reference/nsIXMLHttpRequestEventTarget
 		this.req.addEventListener("loadend", function(evt) { self.loadend(evt); }, false);
+		this.req.addEventListener("error", function(evt) { self.error(evt); }, false);
 
 		//dump("easynzbdlGetNZB.new: Going to get: "+serverurl+"api?t=movie&imdbid="+finaleImdbId+"&apikey="+apikey+"&extended=1\n");
 	 
@@ -113,6 +114,7 @@ easynzbdlDownloadNZB.prototype = {
 		// http://dvcs.w3.org/hg/progress/raw-file/tip/Overview.html
 		// https://developer.mozilla.org/en/XPCOM_Interface_Reference/nsIXMLHttpRequestEventTarget
 		this.req2.addEventListener("loadend", function(evt) { self.loadendSendToSABnzbd(evt); }, false);
+		this.req2.addEventListener("error", function(evt) { self.errorSendToSABnzbd(evt); }, false);
 
 		let serverurl = enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.download.serverurl", "", true);
 		if (serverurl[serverurl.length-1] != "/") {
@@ -130,6 +132,11 @@ easynzbdlDownloadNZB.prototype = {
 		//dump("easynzbdlDownloadNZB.loadend: send GET request.\n");
 		this._element.setAttribute("status", "(Sending NZB to SABnzbd)");
 
+	},
+
+	error: function _error(event)
+	{
+		this._element.setAttribute("status", "(Error during contacting SABnzbd server)");
 	},
 
 	loadendSendToSABnzbd: function _loadendSendToSABnzbd(event)
@@ -152,6 +159,12 @@ easynzbdlDownloadNZB.prototype = {
 		//dump("easynzbdlDownloadNZB.loadendSendToSABnzbd: "+req.responseText+"\n");
 		//var answer = JSON.parse(req.responseText);
 	},
+
+	errorSendToSABnzbd: function _errorSendToSABnzbd(event)
+	{
+		this._element.setAttribute("status", "(Error during contacting SABnzbd server)");
+	},
+
 }
 
 function easynzbdlGetNZB(aImdbId, aDocument, aWindow, searchResultBox, aServerId)
@@ -196,6 +209,7 @@ function easynzbdlGetNZB(aImdbId, aDocument, aWindow, searchResultBox, aServerId
 	// http://dvcs.w3.org/hg/progress/raw-file/tip/Overview.html
 	// https://developer.mozilla.org/en/XPCOM_Interface_Reference/nsIXMLHttpRequestEventTarget
 	this.req.addEventListener("loadend", function(evt) { self.loadend(evt); }, false);
+	this.req.addEventListener("error", function(evt) { self.error(evt); }, false);
 
 	let finaleImdbId = aImdbId;
 	if (finaleImdbId.indexOf("tt") == 0) {
@@ -219,13 +233,11 @@ easynzbdlGetNZB.prototype = {
 		//dump("easynzbdlGetNZB.loadend\n");
 		let req = this.req;
 
-		if (this.debug) this.logInfo(": easynzbdlGetNZB.loadend :"+event.type+", readyState:"+req.readyState+", status:"+req.status);
-		if (this.debug) this.logInfo(": easynzbdlGetNZB.loadend :"+req.responseText,2);
-
 		//this.exchangeStatistics.addDataRead(this.currentUrl, xmlReq.responseText.length);
 
 		if (req.readyState != 4) {
 			//dump("readyState < 4. THIS SHOULD NEVER HAPPEN. PLEASE REPORT.");
+			this.searchResultBox.setAttribute("status", "(Error during contacting search server)");
 			return;
 		}
 
@@ -262,6 +274,10 @@ easynzbdlGetNZB.prototype = {
 		}
 	},
 
+	error: function _error(event)
+	{
+		this.searchResultBox.setAttribute("status", "(Error during contacting search server)");
+	},
 }
 
 function easynzbdlBrowser(aDocument, aWindow)

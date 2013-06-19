@@ -31,8 +31,8 @@
   <binding id="easynzbdl-searchResultItem">
     <content>
 	<xul:hbox minheight="28">
-		<xul:vbox onclick="document.getBindingParent(this).changeExpanded();">
-			<xul:label anonid="expand-searchResultItem" value="+"/>
+		<xul:vbox onclick="document.getBindingParent(this).changeExpanded();" class="expandbutton">
+			<xul:label anonid="expand-searchResultItem" value="+" class="expandbutton" tooltiptext="Show result info"/>
 		</xul:vbox>
 		<xul:vbox>
 			<xul:hbox anonid="searchResultItemLabelBox" align="center">
@@ -180,6 +180,7 @@
 			let expandLabel = document.getAnonymousElementByAttribute(this, "anonid", "expand-searchResultItem");
 			if (expandLabel) {
 				expandLabel.value = this.expanded ? "-" : "+";
+				expandLabel.setAttribute("tooltiptext", (this.expanded ? "Hide result info" : "Show result info"));
 			}
 
 		]]></setter>

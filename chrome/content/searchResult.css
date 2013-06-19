@@ -12,6 +12,10 @@ image.downloadbutton {
 	cursor: pointer;
 }
 
+.expandbutton {
+	cursor: pointer;
+}
+
 .withscrollbars {
 	overflow:auto;
 }
