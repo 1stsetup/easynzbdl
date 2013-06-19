@@ -45,8 +45,10 @@ easynzbdlDownloadNZB.prototype = {
 			this._serverurl = this._serverurl + "/";
 		}
 		this._apikey = encodeURIComponent(enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.download.apikey", "", false));
+		this._username = encodeURIComponent(enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.download.username", "", false));
+		this._password = encodeURIComponent(enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.download.password", "", false));
 
-		if ((this._serverurl == "/") || (this._apikey == "")) {
+		if ((this._serverurl == "/") || ((this._apikey == "") && (this._username == ""))) {
 			//dump("  Not all preferences are available. Going to open pref dialog.\n");
 			alert("Not all preferences for download provider are available. Going to open pref dialog.");
 			this._window.openDialog("chrome://browser/content/preferences/preferences.xul",
@@ -59,8 +61,10 @@ easynzbdlDownloadNZB.prototype = {
 				this._serverurl = this._serverurl + "/";
 			}
 			this._apikey = encodeURIComponent(enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.download.apikey", "", false));
+			this._username = encodeURIComponent(enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.download.username", "", false));
+			this._password = encodeURIComponent(enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.download.password", "", false));
 
-			if ((this._serverurl == "/") || (this._apikey == "")) {
+			if ((this._serverurl == "/") ||  ((this._apikey == "") && (this._username == ""))) {
 				alert("You did not enter all preferences for download provider! Aborting download.");
 				this._element.setAttribute("status", "(Aborted sending NZB to SABnzbd)");
 				return;
@@ -78,8 +82,13 @@ easynzbdlDownloadNZB.prototype = {
 		this.req.addEventListener("error", function(evt) { self.error(evt); }, false);
 
 		//dump("easynzbdlGetNZB.new: Going to get: "+serverurl+"api?t=movie&imdbid="+finaleImdbId+"&apikey="+apikey+"&extended=1\n");
-	 
-		this.req.open("GET", this._serverurl+"api?mode=get_cats&output=json&apikey="+this._apikey, true);
+
+		if (this._apikey != "") {
+			this.req.open("GET", this._serverurl+"api?mode=get_cats&output=json&apikey="+this._apikey, true);
+		}
+		else {
+			this.req.open("GET", this._serverurl+"api?mode=get_cats&output=json&ma_username="+this._username+"&ma_password="+this._password, true);
+		}
 		this.req.send();
 		//dump("easynzbdlDownloadNZB.startDownload: send GET request.\n");
 		this._element.setAttribute("status", "(Getting categories from SABnzbd)");
@@ -126,7 +135,12 @@ easynzbdlDownloadNZB.prototype = {
 			category = "&cat="+encodeURIComponent(category);
 		}
 
-		this.req2.open("GET", this._serverurl+"api?mode=addurl&name="+nzbUrl+"&nzbname="+niceName+"&apikey="+this._apikey+category, true);
+		if (this._apikey != "") {
+			this.req2.open("GET", this._serverurl+"api?mode=addurl&name="+nzbUrl+"&nzbname="+niceName+"&apikey="+this._apikey+category, true);
+		}
+		else {
+			this.req2.open("GET", this._serverurl+"api?mode=addurl&name="+nzbUrl+"&nzbname="+niceName+"&ma_username="+this._username+"&ma_password="+this._password+category, true);
+		}
 		this.req2.send();
 		//dump("easynzbdlDownloadNZB.loadend: send GET request.\n");
 		this._element.setAttribute("status", "(Sending NZB to SABnzbd)");
