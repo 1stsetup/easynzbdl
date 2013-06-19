@@ -30,11 +30,11 @@
 
   <binding id="easynzbdl-searchResultBox">
     <content>
-	<xul:hbox>
+	<xul:hbox maxheight="250" flex="1">
 		<xul:vbox onclick="document.getBindingParent(this).changeExpanded();">
 			<xul:label anonid="expand-searchResultBox" value="+"/>
 		</xul:vbox>
-		<xul:vbox>
+		<xul:vbox class="withscrollbars" flex="1">
 			<xul:hbox anonid="searchResultBoxLabelBox">
 				<xul:label anonid="searchResultBoxTitleLabel" value="empty" xbl:inherits="value=label"/>
 				<xul:label anonid="searchResultBoxStateLabel" value="" xbl:inherits="value=status"/>

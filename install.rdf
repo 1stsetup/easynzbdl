@@ -17,9 +17,9 @@
     </em:targetApplication>
 
     <em:name>Easy NZB Download</em:name>
-    <em:description>Allows you to easyly find the NZB to a movie, from imdb, and send it to SABnzbd for download</em:description>
+    <em:description>Allows you to easyly find the NZB to a movie, from an imdb.com title page, and send it to SABnzbd for download.</em:description>
     <em:creator>Michel Verbraak</em:creator>
-    <em:homepageURL>https://github.com/1stsetup/easynzbdl</em:homepageURL>
+    <em:homepageURL>http://www.easynzbdl.com/</em:homepageURL>
     <em:iconURL>chrome://easynzbdl/content/easynzbdl.png</em:iconURL>
     <em:type>2</em:type> <!-- type: extension -->
     <em:unpack>true</em:unpack>
@@ -28,14 +28,14 @@
 		<Description>
 			<em:locale>en-US</em:locale>
 			<em:name>Easy NZB Download</em:name>
-			<em:description>Allows you to easyly find the NZB to a movie, from imdb, and send it to SABnzbd for download</Description>
+			<em:description>Allows you to easyly find the NZB to a movie, from an imdb.com title page, and send it to SABnzbd for download.</Description>
 	</em:localized>
 
 	<em:localized>
 		<Description>
 			<em:locale>nl</em:locale>
 			<em:name>Exchange EWS Provider</em:name>
-			<em:description>Via een imdb pagina kun je makkelijk de bijbehorende NZB laten opzoeken en doorgeven aan SABnzbd voor download.</Description>
+			<em:description>Via een imdb.com titel pagina kun je makkelijk de bijbehorende NZB laten opzoeken en doorgeven aan SABnzbd voor download.</Description>
 	</em:localized>
 
   </Description>

@@ -40,7 +40,7 @@
 			class="toolbarbutton-1 chromeclass-toolbar-additional"
 			skipintoolbarset="true"
 			hidden="true">
-			<label value="EasyNZBdl"/>
+			<label value="easynzbdl.nav-bar.toolbarbutoon.label"/>
 		</toolbarbutton>
 	</toolbar>
 

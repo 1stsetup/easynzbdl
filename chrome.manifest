@@ -1,5 +1,5 @@
 content easynzbdl chrome/content/
-skin easynzbdl fugue chrome/skins/fugue/
+skin easynzbdl default chrome/skins/default/
 resource easynzbdl components/
 resource interfaces interfaces/
 

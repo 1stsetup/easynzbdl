@@ -30,19 +30,34 @@
 
   <binding id="easynzbdl-searchResultItem">
     <content>
-	<xul:hbox>
-		<xul:vbox>
+	<xul:hbox minheight="28">
+		<xul:vbox onclick="document.getBindingParent(this).changeExpanded();">
 			<xul:label anonid="expand-searchResultItem" value="+"/>
 		</xul:vbox>
 		<xul:vbox>
-			<xul:hbox anonid="searchResultItemLabelBox">
-				<xul:label anonid="searchResultItemTitleLabel" value="empty" xbl:inherits="value=label"/>
+			<xul:hbox anonid="searchResultItemLabelBox" align="center">
+				<xul:image anonid="searchResultItemDownloadButton" src="chrome://easynzbdl/skin/send-to-sabnzbd.png" tooltiptext="Send NZB to SABnzbd" class="downloadbutton" onclick="document.getBindingParent(this).startDownLoad();"/>
 				<xul:label anonid="searchResultItemDaysLabel" value="" xbl:inherits="value=days"/>
-				<xul:image anonid="searchResultItemDownloadButton" class="downloadbutton" onclick="document.getBindingParent(this).startDownLoad();"/>
+				<xul:label anonid="searchResultItemTitleLabel" value="empty" xbl:inherits="value=label"/>
+				<xul:label anonid="searchResultItemSizeLabel" value="" xbl:inherits="value=size"/>
 				<xul:label anonid="searchResultItemDaysLabel" value="" xbl:inherits="value=status"/>
 			</xul:hbox>
-			<xul:vbox anonid="searchResultInfoBox" collapsed="true">
-			</xul:vbox>
+			<xul:hbox anonid="searchResultInfoBox" collapsed="true" align="center">
+				<xul:image anonid="searchResultItemInfoLabel-coverurl" maxheight="150"/>
+				<xul:vbox>
+					<xul:label anonid="searchResultItemInfoLabel-grabs" value=""/>
+					<xul:label anonid="searchResultItemInfoLabel-files" value=""/>
+					<xul:label anonid="searchResultItemInfoLabel-comments" value=""/>
+					<xul:label anonid="searchResultItemInfoLabel-password" value=""/>
+					<xul:label anonid="searchResultItemInfoLabel-imdbtitle" value=""/>
+					<xul:label anonid="searchResultItemInfoLabel-imdbplot" value=""/>
+					<xul:label anonid="searchResultItemInfoLabel-imdbscore" value=""/>
+					<xul:label anonid="searchResultItemInfoLabel-genre" value=""/>
+					<xul:label anonid="searchResultItemInfoLabel-imdbyear" value=""/>
+					<xul:label anonid="searchResultItemInfoLabel-imdbdirector" value=""/>
+					<xul:label anonid="searchResultItemInfoLabel-imdbactors" value=""/>
+				</xul:vbox>
+			</xul:hbox>
 		</xul:vbox>
 	</xul:hbox>
     </content>
@@ -56,6 +71,18 @@
 		this._item = null;
       ]]></destructor>
 
+	<method name="getTagValue">
+        <parameter name="aTagName" />
+        <parameter name="aName" />
+		<body><![CDATA[
+		let value = this._item.XPath('/'+aTagName+'[@name="'+aName+'"]');
+		if (value.length > 0) {
+			return value[0].getAttribute("value");
+		}
+		return "";
+		]]></body>
+	</method>
+
 	<property name="item"> 
 		<getter><![CDATA[
 			return this._item;
@@ -67,11 +94,8 @@
 				this.setAttribute("label", this._item.getTagValue("_default_:title"));
 
 				// Get usenetdate
-				let usenetdate = this._item.XPath('/newznab:attr[@name="usenetdate"]');
+				let usenetdate = this.getTagValue("newznab:attr", "usenetdate");
 				if (usenetdate.length > 0) {
-					//dump("We have a usenetdate\n");
-					usenetdate = usenetdate[0].getAttribute("value");
-					//dump("usenetdate:"+usenetdate+"\n");
 					this._usenetdate = new Date(usenetdate);
 					var diff = ((new Date()).getTime() - this._usenetdate.getTime()) / (1000*3600);
 					if (diff >= 24) {
@@ -84,6 +108,52 @@
 						this.setAttribute("days", Math.round(diff) + " hours");
 					}
 				}
+
+				// Get size
+				let size = this.getTagValue("newznab:attr", "size");
+				if (size.length > 0) {
+					let sizeType = "B";
+					if (size > 1024) {
+						size = size / 1024;
+						sizeType = "KB";
+					}
+					if (size > 1024) {
+						size = size / 1024;
+						sizeType = "MB";
+					}
+					if (size > 1024) {
+						size = size / 1024;
+						sizeType = "GB";
+					}
+
+					size = Math.round(size * 10) / 10;
+					this.setAttribute("size", size + " " + sizeType);
+				}
+
+				document.getAnonymousElementByAttribute(this, "anonid", "searchResultItemInfoLabel-coverurl")
+					.setAttribute("src",this.getTagValue("newznab:attr", "coverurl")); 
+				document.getAnonymousElementByAttribute(this, "anonid", "searchResultItemInfoLabel-grabs")
+					.setAttribute("value", "Grabs: " + this.getTagValue("newznab:attr", "grabs")); 
+				document.getAnonymousElementByAttribute(this, "anonid", "searchResultItemInfoLabel-files")
+					.setAttribute("value", "Files: " + this.getTagValue("newznab:attr", "files")); 
+				document.getAnonymousElementByAttribute(this, "anonid", "searchResultItemInfoLabel-comments")
+					.setAttribute("value", "Comments: " + this.getTagValue("newznab:attr", "comments")); 
+				document.getAnonymousElementByAttribute(this, "anonid", "searchResultItemInfoLabel-password")
+					.setAttribute("value", "Password: " + (this.getTagValue("newznab:attr", "password") == "0" ? "No" : "Yes") ); 
+				document.getAnonymousElementByAttribute(this, "anonid", "searchResultItemInfoLabel-imdbtitle")
+					.setAttribute("value", "IMDb title: " + this.getTagValue("newznab:attr", "imdbtitle")); 
+				document.getAnonymousElementByAttribute(this, "anonid", "searchResultItemInfoLabel-imdbplot")
+					.setAttribute("value", "IMDb plot: " + this.getTagValue("newznab:attr", "imdbplot")); 
+				document.getAnonymousElementByAttribute(this, "anonid", "searchResultItemInfoLabel-imdbscore")
+					.setAttribute("value", "IMDb score: " + this.getTagValue("newznab:attr", "imdbscore")); 
+				document.getAnonymousElementByAttribute(this, "anonid", "searchResultItemInfoLabel-imdbyear")
+					.setAttribute("value", "IMDb year: " + this.getTagValue("newznab:attr", "imdbyear")); 
+				document.getAnonymousElementByAttribute(this, "anonid", "searchResultItemInfoLabel-imdbdirector")
+					.setAttribute("value", "IMDb director: " + this.getTagValue("newznab:attr", "imdbdirector")); 
+				document.getAnonymousElementByAttribute(this, "anonid", "searchResultItemInfoLabel-imdbactors")
+					.setAttribute("value", "IMDb actors: " + this.getTagValue("newznab:attr", "imdbactors")); 
+				document.getAnonymousElementByAttribute(this, "anonid", "searchResultItemInfoLabel-genre")
+					.setAttribute("value", "Genre: " + this.getTagValue("newznab:attr", "genre")); 
 			}
 		]]></setter>
 	</property>
@@ -107,8 +177,19 @@
 			if (itemsBox) {
 				itemsBox.collapsed = !this.expanded;
 			}
+			let expandLabel = document.getAnonymousElementByAttribute(this, "anonid", "expand-searchResultItem");
+			if (expandLabel) {
+				expandLabel.value = this.expanded ? "-" : "+";
+			}
+
 		]]></setter>
 	</property>
+
+	<method name="changeExpanded">
+		<body><![CDATA[
+		this.expanded = !this.expanded;
+		]]></body>
+	</method>
 
 	<method name="show">
 		<body><![CDATA[

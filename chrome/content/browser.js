@@ -37,7 +37,7 @@ easynzbdlDownloadNZB.prototype = {
 
 	startDownload: function _startDownload(aElement)
 	{
-		dump("easynzbdlDownloadNZB.startDownload\n");
+		//dump("easynzbdlDownloadNZB.startDownload\n");
 		this._element = aElement;
 
 		let serverurl = enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.download.serverurl", "", true);
@@ -47,7 +47,7 @@ easynzbdlDownloadNZB.prototype = {
 		let apikey = encodeURIComponent(enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.download.apikey", "", true));
 
 		if ((serverurl == "/") || (apikey == "")) {
-			dump("  Not all preferences are available. Going to open pref dialog.\n");
+			//dump("  Not all preferences are available. Going to open pref dialog.\n");
 			alert("Not all preferences for download provider are available. Going to open pref dialog.");
 			this._window.openDialog("chrome://browser/content/preferences/preferences.xul",
 				"Preferences",
@@ -80,13 +80,13 @@ easynzbdlDownloadNZB.prototype = {
 	 
 		this.req.open("GET", serverurl+"api?mode=get_cats&output=json&apikey="+apikey, true);
 		this.req.send();
-		dump("easynzbdlDownloadNZB.startDownload: send GET request.\n");
+		//dump("easynzbdlDownloadNZB.startDownload: send GET request.\n");
 		this._element.setAttribute("status", "(Getting categories from SABnzbd)");
 	},
 
 	loadend: function _loadend(event)
 	{
-		dump("easynzbdlDownloadNZB.loadend\n");
+		//dump("easynzbdlDownloadNZB.loadend\n");
 		let req = this.req;
 
 		if (this.debug) this.logInfo(": easynzbdlDownloadNZB.loadend :"+event.type+", readyState:"+req.readyState+", status:"+req.status);
@@ -101,7 +101,7 @@ easynzbdlDownloadNZB.prototype = {
 
 		this._element.setAttribute("status", "(Received categories from SABnzbd)");
 
-		dump("easynzbdlDownloadNZB.loadend: "+req.responseText+"\n");
+		//dump("easynzbdlDownloadNZB.loadend: "+req.responseText+"\n");
 		var answer = JSON.parse(req.responseText);
 		// Let user choose category. Is for later.
 
@@ -123,7 +123,7 @@ easynzbdlDownloadNZB.prototype = {
 		var nzbUrl = encodeURIComponent(this.item.getTagValue("_default_:link", ""));
 		var niceName = encodeURIComponent(this.item.getTagValue("_default_:title", ""));
 
-		dump("easynzbdlGetNZB.new: Going to get: "+serverurl+"api?mode=addurl&name="+nzbUrl+"&nzbname="+niceName+"&apikey="+apikey+"\n");
+		//dump("easynzbdlGetNZB.new: Going to get: "+serverurl+"api?mode=addurl&name="+nzbUrl+"&nzbname="+niceName+"&apikey="+apikey+"\n");
 
 		this.req2.open("GET", serverurl+"api?mode=addurl&name="+nzbUrl+"&nzbname="+niceName+"&apikey="+apikey, true);
 		this.req2.send();
@@ -206,7 +206,7 @@ function easynzbdlGetNZB(aImdbId, aDocument, aWindow, searchResultBox)
  
 	this.req.open("GET", serverurl+"api?t=movie&imdbid="+finaleImdbId+"&apikey="+apikey+"&extended=1", true);
 	this.req.send();
-	dump("easynzbdlGetNZB.new: send GET request.\n");
+	//dump("easynzbdlGetNZB.new: send GET request.\n");
 	this.searchResultBox.setAttribute("status", "(Searching)");
 }
 
@@ -316,6 +316,7 @@ easynzbdlBrowser.prototype = {
 
 				var searchResultBox = this._document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "xul:easynzbdl-searchResultBox");
 				searchResultBox.setAttribute("label", "imdbId:"+imdbId);
+				//searchResultBox.setAttribute("maxheight", "200");
 				searchResultBox.id = imdbId;
 				let appcontent = this._document.getElementById("appcontent");
 				appcontent.appendChild(searchResultBox);

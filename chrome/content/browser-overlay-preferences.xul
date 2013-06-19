@@ -35,7 +35,8 @@
 
     <prefwindow id="BrowserPreferences">
         <prefpane id="easynzbdl_panePreferences" 
-                  label="&easynzbdl.panePreferences.title;">
+                  label="&easynzbdl.panePreferences.title;"
+		  image="chrome://easynzbdl/content/easynzbdl.png">
             <preferences>
                 <preference id="extensions.1st-setup.easynzbdl.preferences.selectedTabIndex"
                             name="extensions.1st-setup.easynzbdl.preferences.selectedTabIndex"
