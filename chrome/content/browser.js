@@ -154,18 +154,18 @@ easynzbdlDownloadNZB.prototype = {
 	},
 }
 
-function easynzbdlGetNZB(aImdbId, aDocument, aWindow, searchResultBox)
+function easynzbdlGetNZB(aImdbId, aDocument, aWindow, searchResultBox, aServerId)
 {
 	this.imdbId = aImdbId;
 	this._document = aDocument;
 	this._window = aWindow;
 	this.searchResultBox = searchResultBox;
 
-	let serverurl = enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.search.serverurl", "", true);
+	let serverurl = enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.search."+aServerId+".serverurl", "", true);
 	if (serverurl[serverurl.length-1] != "/") {
 		serverurl = serverurl + "/";
 	}
-	let apikey = encodeURIComponent(enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.search.apikey", "", true));
+	let apikey = encodeURIComponent(enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.search."+aServerId+".apikey", "", true));
 
 	if ((serverurl == "/") || (apikey == "")) {
 		//dump("  Not all preferences are available. Going to open pref dialog.\n");
@@ -175,11 +175,11 @@ function easynzbdlGetNZB(aImdbId, aDocument, aWindow, searchResultBox)
 			"chrome,titlebar,toolbar,centerscreen,dialog,modal=yes,resizable=no",
 			null); 
 
-		serverurl = enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.search.serverurl", "", true);
+		serverurl = enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.search."+aServerId+".serverurl", "", true);
 		if (serverurl[serverurl.length-1] != "/") {
 			serverurl = serverurl + "/";
 		}
-		apikey = encodeURIComponent(enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.search.apikey", "", true));
+		apikey = encodeURIComponent(enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.search."+aServerId+".apikey", "", true));
 
 		if ((serverurl == "/") || (apikey == "")) {
 			alert("You did not enter all preferences for search provider! Aborting search.");
@@ -207,7 +207,9 @@ function easynzbdlGetNZB(aImdbId, aDocument, aWindow, searchResultBox)
 	this.req.open("GET", serverurl+"api?t=movie&imdbid="+finaleImdbId+"&apikey="+apikey+"&extended=1", true);
 	this.req.send();
 	//dump("easynzbdlGetNZB.new: send GET request.\n");
-	this.searchResultBox.setAttribute("status", "(Searching)");
+	this.searchResultBox.setAttribute("status", "(Searching for NZB files)");
+	this.searchResultBox.setAttribute("favicon", serverurl+"/favicon.ico");
+	this.searchResultBox.setAttribute("serverurl", serverurl);
 }
 
 easynzbdlGetNZB.prototype = {
@@ -252,7 +254,12 @@ easynzbdlGetNZB.prototype = {
 			}
 		}
 		//dump("easynzbdlGetNZB.loadend DONE\n");
-		this.searchResultBox.setAttribute("status", "("+items.length+" results)");
+		if (items.length == 1) {
+			this.searchResultBox.setAttribute("status", "(Found "+items.length+" result)");
+		}
+		else {
+			this.searchResultBox.setAttribute("status", "(Found "+items.length+" results)");
+		}
 	},
 
 }
@@ -315,13 +322,13 @@ easynzbdlBrowser.prototype = {
 				}
 
 				var searchResultBox = this._document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "xul:easynzbdl-searchResultBox");
-				searchResultBox.setAttribute("label", "imdbId:"+imdbId);
+				searchResultBox.setAttribute("label", "EasyNZBdl: imdbid="+imdbId);
 				//searchResultBox.setAttribute("maxheight", "200");
 				searchResultBox.id = imdbId;
 				let appcontent = this._document.getElementById("appcontent");
 				appcontent.appendChild(searchResultBox);
 				this._markedPages[imdbId] = { searchResultBox: searchResultBox };
-				this._markedPages[imdbId]["searchObject"] = new easynzbdlGetNZB(imdbId, this._document, this._window, searchResultBox);
+				this._markedPages[imdbId]["searchObject"] = new easynzbdlGetNZB(imdbId, this._document, this._window, searchResultBox, 0);
 				this._lastImdbId = imdbId;
 				//dump("easynzbdlBrowser.parsePage: imdbId:"+imdbId+"\n");
 			}

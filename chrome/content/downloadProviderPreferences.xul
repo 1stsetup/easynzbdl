@@ -58,29 +58,38 @@
 
 	<groupbox id="easynzbdl_download_serverurl_groupbox">
             <caption label="&easynzbdl.preferences.download.server.caption;"/>
-	    <hbox>
-		<label value="&easynzbdl.preferences.download.serverurl.label;"/>
-		<textbox id="easynzbdl_preference_download_serverurl_textbox" 
-			preference="extensions.1st-setup.easynzbdl.download.serverurl"
-			flex="1"/>
-	    </hbox>
-	    <hbox>
-		<label value="&easynzbdl.preferences.download.apikey.label;"/>
-		<textbox id="asynzbdl_preference_download_apikey_textbox" 
-			preference="extensions.1st-setup.easynzbdl.download.apikey"
-			flex="1"/>
-	    </hbox>
-	    <hbox>
-		<label value="&easynzbdl.preferences.download.username.label;"/>
-		<textbox id="asynzbdl_preference_download_username_textbox" 
-			preference="extensions.1st-setup.easynzbdl.download.username"/>
-	    </hbox>
-	    <hbox>
-		<label value="&easynzbdl.preferences.download.password.label;"/>
-		<textbox id="asynzbdl_preference_download_password_textbox" 
-			preference="extensions.1st-setup.easynzbdl.download.password"
-			type="password"/>
-	    </hbox>
+		<grid flex="1">
+			<columns>
+				<column pack="end"/>
+				<column flex="1"/>
+			</columns>
+			<rows>
+				<row align="center">
+					<label value="&easynzbdl.preferences.download.serverurl.label;"/>
+					<textbox id="easynzbdl_preference_download_serverurl_textbox" 
+						preference="extensions.1st-setup.easynzbdl.download.serverurl"
+						flex="1"/>
+				</row>
+				<row align="center">
+					<label value="&easynzbdl.preferences.download.apikey.label;"/>
+					<textbox id="asynzbdl_preference_download_apikey_textbox" 
+						preference="extensions.1st-setup.easynzbdl.download.apikey"
+						flex="1"/>
+				</row>
+				<row align="center">
+					<label value="&easynzbdl.preferences.download.username.label;"/>
+					<textbox id="asynzbdl_preference_download_username_textbox" 
+						preference="extensions.1st-setup.easynzbdl.download.username"/>
+				</row>
+				<row align="center">
+					<label value="&easynzbdl.preferences.download.password.label;"/>
+					<textbox id="asynzbdl_preference_download_password_textbox" 
+						preference="extensions.1st-setup.easynzbdl.download.password"
+						type="password"/>
+				</row>
+			</rows>
+		</grid>
+
         </groupbox>
 
     </vbox>

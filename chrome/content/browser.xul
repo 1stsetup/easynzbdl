@@ -34,6 +34,7 @@
 
     <script type="application/javascript" src="chrome://easynzbdl/content/browser.js"/> 
 
+<!-- Will be used in the future to follow requests send to SABnzbd
 	<toolbar id="nav-bar">
 		<toolbarbutton insertafter="search-container"
 			id="easynzbdl-toolbar-button"
@@ -43,6 +44,7 @@
 			<label value="easynzbdl.nav-bar.toolbarbutoon.label"/>
 		</toolbarbutton>
 	</toolbar>
+-->
 
 </overlay>
 
