@@ -38,7 +38,7 @@
 			<xul:hbox anonid="searchResultItemLabelBox" align="center">
 				<xul:image anonid="searchResultItemDownloadButton" src="chrome://easynzbdl/skin/send-to-sabnzbd.png" tooltiptext="Send NZB to SABnzbd" class="downloadbutton" onclick="document.getBindingParent(this).startDownLoad();"/>
 				<xul:label anonid="searchResultItemDaysLabel" value="" xbl:inherits="value=days"/>
-				<xul:label anonid="searchResultItemTitleLabel" value="empty" xbl:inherits="value=label"/>
+				<xul:label anonid="searchResultItemTitleLabel" value="empty" xbl:inherits="value=label,src=remotepage,tooltiptext=remotepagelabel" src="" onclick="document.getBindingParent(this).openRemotePage(this);" class="ahref"/>
 				<xul:label anonid="searchResultItemSizeLabel" value="" xbl:inherits="value=size"/>
 				<xul:label anonid="searchResultItemDaysLabel" value="" xbl:inherits="value=status"/>
 			</xul:hbox>
@@ -92,6 +92,8 @@
 			if (this._item) {
 				//dump("item:"+this._item.getTagValue("_default_:title")+"\n");
 				this.setAttribute("label", this._item.getTagValue("_default_:title"));
+				this.setAttribute("remotepage", this._item.getTagValue("_default_:guid"));
+				this.setAttribute("remotepagelabel", "Goto info page on search provider");
 
 				// Get usenetdate
 				let usenetdate = this.getTagValue("newznab:attr", "usenetdate");
@@ -189,6 +191,15 @@
 	<method name="changeExpanded">
 		<body><![CDATA[
 		this.expanded = !this.expanded;
+		]]></body>
+	</method>
+
+	<method name="openRemotePage">
+        <parameter name="aSrc" />
+		<body><![CDATA[
+		if (gBrowser) {
+			gBrowser.addTab(aSrc.getAttribute("src"));
+		}
 		]]></body>
 	</method>
 

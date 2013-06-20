@@ -343,27 +343,38 @@ easynzbdlBrowser.prototype = {
 			if (imdbId) {
 				if (this._markedPages[imdbId]) {
 					if ((this._lastImdbId) && (this._markedPages[this._lastImdbId])) {
-						this._markedPages[this._lastImdbId].searchResultBox.hide();
+						for each(var markedPage in this._markedPages[this._lastImdbId]) {
+							markedPage.searchResultBox.hide();
+						}
 					}
-					this._markedPages[imdbId].searchResultBox.show();
+					for each(var markedPage in this._markedPages[imdbId]) {
+						markedPage.searchResultBox.show();
+					}
 					this._lastImdbId = imdbId;
 					return;
 				}
 
-				var searchResultBox = this._document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "xul:easynzbdl-searchResultBox");
-				searchResultBox.setAttribute("label", "EasyNZBdl: imdbid="+imdbId);
-				//searchResultBox.setAttribute("maxheight", "200");
-				searchResultBox.id = imdbId;
-				let appcontent = this._document.getElementById("appcontent");
-				appcontent.appendChild(searchResultBox);
-				this._markedPages[imdbId] = { searchResultBox: searchResultBox };
-				this._markedPages[imdbId]["searchObject"] = new easynzbdlGetNZB(imdbId, this._document, this._window, searchResultBox, 0);
+				this._markedPages[imdbId] = {};
+				for (var serverId=0; serverId<3; serverId++) {
+					if (enzbdlSafeGetBoolPref(null, "extensions.1st-setup.easynzbdl.search."+serverId+".enabled", "", false)) {
+						var searchResultBox = this._document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "xul:easynzbdl-searchResultBox");
+						searchResultBox.setAttribute("label", "EasyNZBdl: imdbid="+imdbId);
+						//searchResultBox.setAttribute("maxheight", "200");
+						searchResultBox.id = imdbId;
+						let appcontent = this._document.getElementById("appcontent");
+						appcontent.appendChild(searchResultBox);
+						this._markedPages[imdbId][serverId] = { searchResultBox: searchResultBox };
+						this._markedPages[imdbId][serverId]["searchObject"] = new easynzbdlGetNZB(imdbId, this._document, this._window, searchResultBox, serverId);
+						//dump("easynzbdlBrowser.parsePage: imdbId:"+imdbId+", serverId:"+serverId+"\n");
+					}
+				}
 				this._lastImdbId = imdbId;
-				//dump("easynzbdlBrowser.parsePage: imdbId:"+imdbId+"\n");
 			}
 			else {
 				if ((this._lastImdbId) && (this._markedPages[this._lastImdbId])) {
-					this._markedPages[this._lastImdbId].searchResultBox.hide();
+					for each(var markedPage in this._markedPages[this._lastImdbId]) {
+						markedPage.searchResultBox.hide();
+					}
 					this._lastImdbId = null;
 				}
 			}
@@ -396,14 +407,18 @@ easynzbdlBrowser.prototype = {
 			let imdbId = this.getImdbId(tabBrowser.currentURI.spec);
 
 			if ((this._lastImdbId) && (this._markedPages[this._lastImdbId])) {
-				this._markedPages[this._lastImdbId].searchResultBox.hide();
-				//dump("easynzbdlBrowser.onTabSelect: hidden label. this._lastImdbId:"+this._lastImdbId+"\n");
+				for each(var markedPages in this._markedPages[this._lastImdbId]) {
+					markedPages.searchResultBox.hide();
+					//dump("easynzbdlBrowser.onTabSelect: hidden label. this._lastImdbId:"+this._lastImdbId+", serverId:"+serverId+"\n");
+				}
 			}
 
 			if (imdbId) {
 				if (this._markedPages[imdbId]) {
-					this._markedPages[imdbId].searchResultBox.show();
-					//dump("easynzbdlBrowser.onTabSelect: shown label. this._lastImdbId:"+imdbId+"\n");
+					for each(var markedPages in this._markedPages[imdbId]) {
+						markedPages.searchResultBox.show();
+						//dump("easynzbdlBrowser.onTabSelect: shown label. this._lastImdbId:"+imdbId+", serverId:"+serverId+"\n");
+					}
 					this._lastImdbId = imdbId;
 				}
 				//dump("easynzbdlBrowser.onTabSelect: imdbId:"+imdbId+"\n");
@@ -425,7 +440,9 @@ easynzbdlBrowser.prototype = {
 			if (imdbId) {
 				//dump("easynzbdlBrowser.onTabClose: imdbId:"+imdbId+"\n");
 				if (this._markedPages[imdbId]) {
-					this._markedPages[imdbId].searchResultBox.hide();
+					for each(var markedPage in this._markedPages[imdbId]) {
+						markedPage.searchResultBox.hide();
+					}
 				}
 				this._markedPages[imdbId] = null;
 				delete this._markedPages[imdbId];

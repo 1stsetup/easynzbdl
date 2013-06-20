@@ -16,6 +16,10 @@ image.downloadbutton {
 	cursor: pointer;
 }
 
+.ahref {
+	cursor: pointer;
+}
+
 .withscrollbars {
 	overflow:auto;
 }

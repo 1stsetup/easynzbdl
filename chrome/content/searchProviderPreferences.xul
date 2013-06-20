@@ -35,9 +35,13 @@
 
 	<script type="application/javascript" src="chrome://easynzbdl/content/searchProviderPreferences.js"/>
 
-    <vbox id="easynzbdl_search_preferences_vbox" flex="1">
+    <vbox id="easynzbdl_search_preferences_vbox" flex="1" class="withscrollbars">
 
         <preferences>
+            <preference id="extensions.1st-setup.easynzbdl.search.0.enabled"
+                        name="extensions.1st-setup.easynzbdl.search.0.enabled"
+                        type="bool"/>
+
             <preference id="extensions.1st-setup.easynzbdl.search.0.serverurl"
                         name="extensions.1st-setup.easynzbdl.search.0.serverurl"
                         type="string"/>
@@ -46,10 +50,38 @@
                         name="extensions.1st-setup.easynzbdl.search.0.apikey"
                         type="string"/>
 
-        </preferences>
+             <preference id="extensions.1st-setup.easynzbdl.search.1.enabled"
+                        name="extensions.1st-setup.easynzbdl.search.1.enabled"
+                        type="bool"/>
 
-	<groupbox id="easynzbdl_search_serverurl_groupbox">
-		<caption label="&easynzbdl.preferences.search.server.caption;"/>
+            <preference id="extensions.1st-setup.easynzbdl.search.1.serverurl"
+                        name="extensions.1st-setup.easynzbdl.search.1.serverurl"
+                        type="string"/>
+
+            <preference id="extensions.1st-setup.easynzbdl.search.1.apikey"
+                        name="extensions.1st-setup.easynzbdl.search.1.apikey"
+                        type="string"/>
+
+             <preference id="extensions.1st-setup.easynzbdl.search.2.enabled"
+                        name="extensions.1st-setup.easynzbdl.search.2.enabled"
+                        type="bool"/>
+
+            <preference id="extensions.1st-setup.easynzbdl.search.2.serverurl"
+                        name="extensions.1st-setup.easynzbdl.search.2.serverurl"
+                        type="string"/>
+
+            <preference id="extensions.1st-setup.easynzbdl.search.2.apikey"
+                        name="extensions.1st-setup.easynzbdl.search.2.apikey"
+                        type="string"/>
+
+       </preferences>
+
+	<groupbox id="easynzbdl_search_serverurl_groupbox0">
+		<caption label="&easynzbdl.preferences.search.server.caption.0;"/>
+		<checkbox label="&easynzbdl.preferences.search.enabled.checkbox;"
+			preference="extensions.1st-setup.easynzbdl.search.0.enabled"
+			flex="1"
+			pack="center"/>
 		<grid flex="1">
 			<columns>
 				<column pack="end"/>
@@ -59,7 +91,7 @@
 				<row align="center">
 					<label value="&easynzbdl.preferences.search.serverurl.label;"
 						pack="center"/>
-					<textbox id="easynzbdl_preference_search_serverurl_textbox" 
+					<textbox id="easynzbdl_preference_search_serverurl_textbox0" 
 						preference="extensions.1st-setup.easynzbdl.search.0.serverurl"
 						flex="1"
 						pack="center"/>
@@ -67,8 +99,72 @@
 				<row align="center">
 					<label value="&easynzbdl.preferences.search.apikey.label;"
 						pack="center"/>
-					<textbox id="asynzbdl_preference_search_apikey_textbox" 
+					<textbox id="asynzbdl_preference_search_apikey_textbox0" 
 						preference="extensions.1st-setup.easynzbdl.search.0.apikey"
+						flex="1"
+						pack="center"/>
+				</row>
+			</rows>
+		</grid>
+        </groupbox>
+
+	<groupbox id="easynzbdl_search_serverurl_groupbox1">
+		<caption label="&easynzbdl.preferences.search.server.caption.1;"/>
+		<checkbox label="&easynzbdl.preferences.search.enabled.checkbox;"
+			preference="extensions.1st-setup.easynzbdl.search.1.enabled"
+			flex="1"
+			pack="center"/>
+		<grid flex="1">
+			<columns>
+				<column pack="end"/>
+				<column flex="1"/>
+			</columns>
+			<rows>
+				<row align="center">
+					<label value="&easynzbdl.preferences.search.serverurl.label;"
+						pack="center"/>
+					<textbox id="easynzbdl_preference_search_serverurl_textbox1" 
+						preference="extensions.1st-setup.easynzbdl.search.1.serverurl"
+						flex="1"
+						pack="center"/>
+				</row>
+				<row align="center">
+					<label value="&easynzbdl.preferences.search.apikey.label;"
+						pack="center"/>
+					<textbox id="asynzbdl_preference_search_apikey_textbox1" 
+						preference="extensions.1st-setup.easynzbdl.search.1.apikey"
+						flex="1"
+						pack="center"/>
+				</row>
+			</rows>
+		</grid>
+        </groupbox>
+
+	<groupbox id="easynzbdl_search_serverurl_groupbox2">
+		<caption label="&easynzbdl.preferences.search.server.caption.2;"/>
+		<checkbox label="&easynzbdl.preferences.search.enabled.checkbox;"
+			preference="extensions.1st-setup.easynzbdl.search.2.enabled"
+			flex="1"
+			pack="center"/>
+		<grid flex="1">
+			<columns>
+				<column pack="end"/>
+				<column flex="1"/>
+			</columns>
+			<rows>
+				<row align="center">
+					<label value="&easynzbdl.preferences.search.serverurl.label;"
+						pack="center"/>
+					<textbox id="easynzbdl_preference_search_serverurl_textbox2" 
+						preference="extensions.1st-setup.easynzbdl.search.2.serverurl"
+						flex="1"
+						pack="center"/>
+				</row>
+				<row align="center">
+					<label value="&easynzbdl.preferences.search.apikey.label;"
+						pack="center"/>
+					<textbox id="asynzbdl_preference_search_apikey_textbox2" 
+						preference="extensions.1st-setup.easynzbdl.search.2.apikey"
 						flex="1"
 						pack="center"/>
 				</row>

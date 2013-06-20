@@ -3,7 +3,10 @@
 <!ENTITY easynzbdl.preferences.tab.search "Search provider">
 <!ENTITY easynzbdl.preferences.tab.download "Download provider">
 
-<!ENTITY easynzbdl.preferences.search.server.caption "Search server details:">
+<!ENTITY easynzbdl.preferences.search.server.caption.0 "Search server details 1:">
+<!ENTITY easynzbdl.preferences.search.server.caption.1 "Search server details 2:">
+<!ENTITY easynzbdl.preferences.search.server.caption.2 "Search server details 3:">
+<!ENTITY easynzbdl.preferences.search.enabled.checkbox "Enabled.">
 <!ENTITY easynzbdl.preferences.search.serverurl.label "Server url:">
 <!ENTITY easynzbdl.preferences.search.apikey.label "API key:">
 
