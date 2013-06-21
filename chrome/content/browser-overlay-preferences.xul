@@ -33,6 +33,8 @@
 
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
+    <script type="application/javascript" src="resource://easynzbdl/globalFunctions.js"/> 
+
     <prefwindow id="BrowserPreferences">
         <prefpane id="easynzbdl_panePreferences" 
                   label="&easynzbdl.panePreferences.title;"

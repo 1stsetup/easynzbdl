@@ -16,4 +16,11 @@
 <!ENTITY easynzbdl.preferences.download.username.label "Username:">
 <!ENTITY easynzbdl.preferences.download.password.label "Password:">
 <!ENTITY easynzbdl.preferences.download.category.label "Category:">
+<!ENTITY easynzbdl.preferences.download.enabled.checkbox "Enabled.">
+
+<!ENTITY easynzbdl.preferences.savetofile.caption "Save to local folder:">
+<!ENTITY easynzbdl.preferences.savetofile.enabled.checkbox "Enabled.">
+
+<!ENTITY easynzbdl.preferences.savetofile.folder.button "Select folder">
+
 

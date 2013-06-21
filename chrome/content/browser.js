@@ -99,11 +99,6 @@ easynzbdlDownloadNZB.prototype = {
 		//dump("easynzbdlDownloadNZB.loadend\n");
 		let req = this.req;
 
-		if (this.debug) this.logInfo(": easynzbdlDownloadNZB.loadend :"+event.type+", readyState:"+req.readyState+", status:"+req.status);
-		if (this.debug) this.logInfo(": easynzbdlDownloadNZB.loadend :"+req.responseText,2);
-
-		//this.exchangeStatistics.addDataRead(this.currentUrl, xmlReq.responseText.length);
-
 		if (req.readyState != 4) {
 			dump("readyState < 4. THIS SHOULD NEVER HAPPEN. PLEASE REPORT.");
 			return;
@@ -157,11 +152,6 @@ easynzbdlDownloadNZB.prototype = {
 		//dump("easynzbdlDownloadNZB.loadendSendToSABnzbd\n");
 		let req = this.req2;
 
-		if (this.debug) this.logInfo(": easynzbdlDownloadNZB.loadendSendToSABnzbd :"+event.type+", readyState:"+req.readyState+", status:"+req.status);
-		if (this.debug) this.logInfo(": easynzbdlDownloadNZB.loadendSendToSABnzbd :"+req.responseText,2);
-
-		//this.exchangeStatistics.addDataRead(this.currentUrl, xmlReq.responseText.length);
-
 		if (req.readyState != 4) {
 			//dump("readyState < 4. THIS SHOULD NEVER HAPPEN. PLEASE REPORT.");
 			return;
@@ -177,6 +167,72 @@ easynzbdlDownloadNZB.prototype = {
 	{
 		this._element.setAttribute("status", "(Error during contacting SABnzbd server)");
 	},
+
+	saveToFolder: function _saveToFolder(aElement)
+	{
+		this._element = aElement;
+
+		this.req = Cc["@mozilla.org/xmlextras/xmlhttprequest;1"].createInstance();
+
+		var self = this;
+
+		// http://dvcs.w3.org/hg/progress/raw-file/tip/Overview.html
+		// https://developer.mozilla.org/en/XPCOM_Interface_Reference/nsIXMLHttpRequestEventTarget
+		this.req.addEventListener("loadend", function(evt) { self.loadendSaveToFolder(evt); }, false);
+		this.req.addEventListener("error", function(evt) { self.errorSaveToFolder(evt); }, false);
+
+		//dump("saveToFolder: Going to get: "+serverurl+"api?t=movie&imdbid="+finaleImdbId+"&apikey="+apikey+"&extended=1\n");
+
+		var nzbUrl = this.item.getTagValue("_default_:link", "");
+
+		//dump("Opening:"+nzbUrl+"\n");
+
+		this.req.open("GET", nzbUrl, true);
+		this.req.send();
+		//dump("easynzbdlDownloadNZB.startDownload: send GET request.\n");
+		this._element.setAttribute("status", "(Downloading NZB file)");
+	},
+
+	loadendSaveToFolder: function _loadendSaveToFolder(event)
+	{
+		//dump("easynzbdlDownloadNZB.loadendSendToSABnzbd\n");
+		let req = this.req;
+
+		if (req.readyState != 4) {
+			//dump("readyState < 4. THIS SHOULD NEVER HAPPEN. PLEASE REPORT.");
+			return;
+		}
+
+		this._element.setAttribute("status", "(Downloading NZB successfull. Going to save)");
+
+		// Save to file
+		var niceName = this.item.getTagValue("_default_:title", "");
+		var saveFolder = enzbdlSafeGetCharPref(null, "extensions.1st-setup.easynzbdl.savetofile.folder", "", true);
+
+		//dump("Going to save to:"+saveFolder+"/"+niceName+".nzb"+"\n");
+
+		var file = Cc["@mozilla.org/file/local;1"].createInstance(Ci.nsIFile);
+		file.initWithPath(saveFolder);
+		file.append(niceName+".nzb");
+
+		try {
+			var stream = Cc["@mozilla.org/network/file-output-stream;1"].createInstance(Ci.nsIFileOutputStream);
+			stream.init(file, 0x04 | 0x08 | 0x20, 384, 0); // readwrite, create, truncate
+			var converter = Cc["@mozilla.org/intl/converter-output-stream;1"].createInstance(Ci.nsIConverterOutputStream);
+			converter.init(stream, "UTF-8", 0, 0);
+			converter.writeString(req.responseText);
+			converter.close();
+			this._element.setAttribute("status", "(Saved NZB file)");
+		} catch(err) {
+			this._element.setAttribute("status", "(Error saving NZB file)");
+		}
+	},
+
+	errorSaveToFolder: function _errorSaveToFolder(event)
+	{
+		this._element.setAttribute("status", "(Error downloading NZB file)");
+	},
+
 
 }
 
@@ -356,7 +412,7 @@ easynzbdlBrowser.prototype = {
 
 				this._markedPages[imdbId] = {};
 				for (var serverId=0; serverId<3; serverId++) {
-					if (enzbdlSafeGetBoolPref(null, "extensions.1st-setup.easynzbdl.search."+serverId+".enabled", "", false)) {
+					if (enzbdlSafeGetBoolPref(null, "extensions.1st-setup.easynzbdl.search."+serverId+".enabled", false, false)) {
 						var searchResultBox = this._document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "xul:easynzbdl-searchResultBox");
 						searchResultBox.setAttribute("label", "EasyNZBdl: imdbid="+imdbId);
 						//searchResultBox.setAttribute("maxheight", "200");

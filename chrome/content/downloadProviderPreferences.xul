@@ -38,6 +38,10 @@
     <vbox id="easynzbdl_dowload_preferences_vbox">
 
         <preferences>
+            <preference id="extensions.1st-setup.easynzbdl.download.enabled"
+                        name="extensions.1st-setup.easynzbdl.download.enabled"
+                        type="bool"/>
+
             <preference id="extensions.1st-setup.easynzbdl.download.serverurl"
                         name="extensions.1st-setup.easynzbdl.download.serverurl"
                         type="string"/>
@@ -58,10 +62,22 @@
                         name="extensions.1st-setup.easynzbdl.download.category"
                         type="string"/>
 
+            <preference id="extensions.1st-setup.easynzbdl.savetofile.enabled"
+                        name="extensions.1st-setup.easynzbdl.savetofile.enabled"
+                        type="bool"/>
+
+            <preference id="extensions.1st-setup.easynzbdl.savetofile.folder"
+                        name="extensions.1st-setup.easynzbdl.savetofile.folder"
+                        type="string"/>
+
         </preferences>
 
 	<groupbox id="easynzbdl_download_serverurl_groupbox">
             <caption label="&easynzbdl.preferences.download.server.caption;"/>
+		<checkbox label="&easynzbdl.preferences.download.enabled.checkbox;"
+			preference="extensions.1st-setup.easynzbdl.download.enabled"
+			flex="1"
+			pack="center"/>
 		<grid flex="1">
 			<columns>
 				<column pack="end"/>
@@ -99,6 +115,28 @@
 			</rows>
 		</grid>
 
+        </groupbox>
+
+	<groupbox id="easynzbdl_download_savetofile_groupbox">
+            <caption label="&easynzbdl.preferences.savetofile.caption;"/>
+		<checkbox label="&easynzbdl.preferences.savetofile.enabled.checkbox;"
+			preference="extensions.1st-setup.easynzbdl.savetofile.enabled"
+			flex="1"
+			pack="center"/>
+		<vbox>
+			<hbox align="center" flex="1">
+			    <textbox id="easynzbdl_download_savetofile_folder_textbox"
+				       flex="1"
+				       preference="extensions.1st-setup.easynzbdl.savetofile.folder"
+				       preference-editable="true"
+				       onsyncfrompreference="return tmpEasynzbdlDownloadProviderPreferences.setFolderFromPref();"/>
+			</hbox>
+			<hbox pack="end">
+			    <button id="easynzbdl_download_savetofile_folder_button"
+				    label="&easynzbdl.preferences.savetofile.folder.button;"
+				    oncommand="tmpEasynzbdlDownloadProviderPreferences.browseFolder()"/>
+			</hbox>
+		</vbox>
         </groupbox>
 
     </vbox>

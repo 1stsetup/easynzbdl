@@ -36,7 +36,8 @@
 		</xul:vbox>
 		<xul:vbox>
 			<xul:hbox anonid="searchResultItemLabelBox" align="center">
-				<xul:image anonid="searchResultItemDownloadButton" src="chrome://easynzbdl/skin/send-to-sabnzbd.png" tooltiptext="Send NZB to SABnzbd" class="downloadbutton" onclick="document.getBindingParent(this).startDownLoad();"/>
+				<xul:image anonid="searchResultItemDownloadButton" src="chrome://easynzbdl/skin/send-to-sabnzbd.png" tooltiptext="Send NZB to SABnzbd" class="downloadbutton" onclick="document.getBindingParent(this).startDownLoad();" hidden="true"/>
+				<xul:image anonid="searchResultItemSaveToFolderButton" src="chrome://easynzbdl/skin/save-to-folder.png" tooltiptext="Save in local folder" class="downloadbutton" onclick="document.getBindingParent(this).saveToFolder();" hidden="true"/>
 				<xul:label anonid="searchResultItemDaysLabel" value="" xbl:inherits="value=days"/>
 				<xul:label anonid="searchResultItemTitleLabel" value="empty" xbl:inherits="value=label,src=remotepage,tooltiptext=remotepagelabel" src="" onclick="document.getBindingParent(this).openRemotePage(this);" class="ahref"/>
 				<xul:label anonid="searchResultItemSizeLabel" value="" xbl:inherits="value=size"/>
@@ -66,6 +67,15 @@
       <constructor><![CDATA[
 		//dump("easynzbdl-searchResultItem constructor\n");
 		this._item = null;
+		if (enzbdlSafeGetBoolPref(null, "extensions.1st-setup.easynzbdl.download.enabled", false, false)) {
+			document.getAnonymousElementByAttribute(this, "anonid", "searchResultItemDownloadButton")
+					.setAttribute("hidden","false");
+		}
+
+		if (enzbdlSafeGetBoolPref(null, "extensions.1st-setup.easynzbdl.savetofile.enabled", false, false)) {
+			document.getAnonymousElementByAttribute(this, "anonid", "searchResultItemSaveToFolderButton")
+					.setAttribute("hidden","false");
+		}
       ]]></constructor>
       <destructor><![CDATA[
 		this._item = null;
@@ -220,6 +230,15 @@
 		//dump("Start download\n");
 		if (this._parentObject) {
 			this._parentObject.startDownload(this);
+		}
+		]]></body>
+	</method>
+
+	<method name="saveToFolder">
+		<body><![CDATA[
+		//dump("Start saveToFolder\n");
+		if (this._parentObject) {
+			this._parentObject.saveToFolder(this);
 		}
 		]]></body>
 	</method>
