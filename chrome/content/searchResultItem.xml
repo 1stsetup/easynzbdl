@@ -198,7 +198,7 @@
         <parameter name="aSrc" />
 		<body><![CDATA[
 		if (gBrowser) {
-			gBrowser.addTab(aSrc.getAttribute("src"));
+			gBrowser.selectedTab = gBrowser.addTab(aSrc.getAttribute("src"));
 		}
 		]]></body>
 	</method>
