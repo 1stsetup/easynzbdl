@@ -22,7 +22,6 @@ var Ci = Components.interfaces;
 var Cc = Components.classes;
 
 Cu.import("resource://easynzbdl/globalFunctions.js");
-Cu.import("resource://interfaces/xml2jxon/mivIxml2jxon.js");
 
 function easynzbdlDownloadNZB(aImdbId, aDocument, aWindow, searchResultBox, aItem)
 {
@@ -311,7 +310,7 @@ easynzbdlGetNZB.prototype = {
 		}
 
 		try {
-			var newXML = new mivIxml2jxon('', 0, null);
+			var newXML = Cc["@1st-setup.nl/conversion/xml2jxon;1"].createInstance(Ci.mivIxml2jxon);
 		}
 		catch(exc) { dump("easynzbdlGetNZB.loadend createInstance error:"+exc+"\n"); return;} 
 
