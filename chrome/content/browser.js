@@ -486,8 +486,6 @@ easynzbdlBrowser.prototype = {
 		//dump("easynzbdlBrowser.onTabClose\n");
 		let tabBrowser = this.getBrowserForTab(event.target);
 
-		let tabBrowser = this.getBrowserForTab(event.target);
-
 		if (tabBrowser) {
 			//dump("easynzbdlBrowser.onTabClose: tabBrowser.currentURI:"+tabBrowser.currentURI.spec+"\n");
 
